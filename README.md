@@ -1,3 +1,36 @@
+### Fork changes
+
+- Add support for enums via `#[derive(VariantFieldCount)]` and `VariantFieldCount` trait
+
+<details>
+  <summary>Usage</summary>
+
+```rust
+// main.rs
+
+use field_count::VariantFieldCount;
+
+#[derive(VariantFieldCount)]
+enum MyEnum {
+    A,
+    B(usize),
+    C(Vec<u8>, bool),
+}
+
+fn main() {
+    let a = MyEnum::A;
+    let b = MyEnum::B(128);
+    let c = MyEnum::C(vec![], true);
+    println!("{}", a.field_count()); // 0
+    println!("{}", b.field_count()); // 1
+    println!("{}", c.field_count()); // 2
+}
+```
+
+</details>
+
+<sub>Original README below</sub>
+
 # field_count
 
 Derive the field count for a struct. Implements a `FieldCount` trait. Supports generic structs.

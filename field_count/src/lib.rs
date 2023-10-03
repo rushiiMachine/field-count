@@ -20,12 +20,34 @@ pub trait FieldCount {
     fn field_count() -> usize;
 }
 
+/// An enum that exposes the number of fields each of its variants have.
+///
+/// This trait can be derived:
+///
+/// ```
+/// use field_count::VariantFieldCount;
+///
+/// #[derive(VariantFieldCount)]
+/// enum MyEnum
+/// {
+///     A,
+///     B(usize),
+///     C(Vec<u8>, bool),
+/// }
+///
+/// println!("{}", MyEnum::C(vec![], true).field_count()); // 2
+/// ```
+pub trait VariantFieldCount {
+    /// Get the number of fields this enum variant has.
+    fn field_count(&self) -> usize;
+}
+
 // Export derive macro from derive crate.
 pub use field_count_derive::*;
 
 #[cfg(test)]
 mod tests {
-    use super::FieldCount;
+    use super::{FieldCount, VariantFieldCount};
 
     #[test]
     fn test_derive_field_count_for_struct() {
@@ -46,6 +68,36 @@ mod tests {
         T::field_count()
     }
 
+    #[test]
+    fn test_derive_variant_field_count_for_enum() {
+        let a = MyEnum::A;
+        let b = MyEnum::B(32);
+        let c = MyEnum::C(vec![], true);
+
+        assert_eq!(a.field_count(), 0);
+        assert_eq!(b.field_count(), 1);
+        assert_eq!(c.field_count(), 2);
+    }
+
+    #[test]
+    fn test_derive_variant_field_count_for_generic_enum() {
+        let b: MyGenericEnum<i32> = MyGenericEnum::Basic;
+        let g = MyGenericEnum::Gen::<Vec<i32>>(vec![1, 2, 3]);
+
+        assert_eq!(b.field_count(), 0);
+        assert_eq!(g.field_count(), 1);
+    }
+
+    #[test]
+    fn test_derive_variant_field_count_as_trait() {
+        let c = MyEnum::C(vec![], true);
+        assert_eq!(field_count_enum(&c), 2);
+    }
+
+    fn field_count_enum<T: VariantFieldCount>(v: &T) -> usize {
+        v.field_count()
+    }
+
     #[derive(FieldCount)]
     struct MyStruct {
         _first_field: i32,
@@ -56,5 +108,18 @@ mod tests {
     #[derive(FieldCount)]
     struct MyGenericStruct<T> {
         _generic_field: T,
+    }
+
+    #[derive(VariantFieldCount)]
+    enum MyEnum {
+        A,
+        B(usize),
+        C(Vec<u8>, bool),
+    }
+
+    #[derive(VariantFieldCount)]
+    enum MyGenericEnum<T> {
+        Basic,
+        Gen(T),
     }
 }

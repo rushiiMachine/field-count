@@ -1,6 +1,7 @@
 use proc_macro::TokenStream;
+
 use quote::{quote, TokenStreamExt};
-use syn::{parse_macro_input, ItemEnum, ItemStruct};
+use syn::{ItemEnum, ItemStruct, parse_macro_input};
 
 #[proc_macro_derive(FieldCount)]
 pub fn derive_field_count(input: TokenStream) -> TokenStream {
@@ -11,7 +12,7 @@ pub fn derive_field_count(input: TokenStream) -> TokenStream {
     let field_count = input.fields.iter().count();
 
     let output = quote! {
-        impl #impl_generics FieldCount for #name #ty_generics #where_clause {
+        impl #impl_generics ::field_count::FieldCount for #name #ty_generics #where_clause {
             fn field_count() -> usize {
                 #field_count
             }
@@ -50,7 +51,7 @@ pub fn derive_field_count_enum(input: TokenStream) -> TokenStream {
     });
 
     let output = quote! {
-        impl #impl_generics EnumFieldCount for #enum_name #ty_generics #where_clause {
+        impl #impl_generics ::field_count::EnumFieldCount for #enum_name #ty_generics #where_clause {
             fn field_count(&self) -> usize {
                 match *self {
                     #match_arms

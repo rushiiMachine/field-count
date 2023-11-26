@@ -16,6 +16,12 @@ pub fn derive_field_count(input: TokenStream) -> TokenStream {
                 #field_count
             }
         }
+
+        impl #impl_generics #name #ty_generics #where_clause {
+            const fn field_count() -> usize {
+                #field_count
+            }
+        }
     };
 
     TokenStream::from(output)

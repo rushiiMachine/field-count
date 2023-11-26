@@ -55,6 +55,12 @@ mod tests {
     }
 
     #[test]
+    fn test_derive_const_field_count_for_struct() {
+        const COUNT: usize = MyStruct::field_count();
+        assert_eq!(COUNT, 3);
+    }
+
+    #[test]
     fn test_derive_field_count_for_generic_struct() {
         assert_eq!(MyGenericStruct::<u32>::field_count(), 1);
     }

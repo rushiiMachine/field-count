@@ -1,6 +1,6 @@
 ### Fork changes
 
-- Add support for enums via `#[derive(VariantFieldCount)]` and `VariantFieldCount` trait
+- Add support for enums via `#[derive(EnumFieldCount)]` and `VariantFieldCount` trait
 
 <details>
   <summary>Usage</summary>
@@ -8,9 +8,9 @@
 ```rust
 // main.rs
 
-use field_count::VariantFieldCount;
+use field_count::EnumFieldCount;
 
-#[derive(VariantFieldCount)]
+#[derive(EnumFieldCount)]
 enum MyEnum {
     A,
     B(usize),

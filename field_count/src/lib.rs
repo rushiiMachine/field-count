@@ -20,14 +20,14 @@ pub trait FieldCount {
     fn field_count() -> usize;
 }
 
-/// An enum that exposes the number of fields each of its variants have.
+/// An enum that exposes the number of fields each of its variants have based on a runtime value.
 ///
 /// This trait can be derived:
 ///
 /// ```
-/// use field_count::VariantFieldCount;
+/// use field_count::EnumFieldCount;
 ///
-/// #[derive(VariantFieldCount)]
+/// #[derive(EnumFieldCount)]
 /// enum MyEnum
 /// {
 ///     A,
@@ -37,7 +37,7 @@ pub trait FieldCount {
 ///
 /// println!("{}", MyEnum::C(vec![], true).field_count()); // 2
 /// ```
-pub trait VariantFieldCount {
+pub trait EnumFieldCount {
     /// Get the number of fields this enum variant has.
     fn field_count(&self) -> usize;
 }
@@ -47,7 +47,7 @@ pub use field_count_derive::*;
 
 #[cfg(test)]
 mod tests {
-    use super::{FieldCount, VariantFieldCount};
+    use super::{FieldCount, EnumFieldCount};
 
     #[test]
     fn test_derive_field_count_for_struct() {
@@ -94,7 +94,7 @@ mod tests {
         assert_eq!(field_count_enum(&c), 2);
     }
 
-    fn field_count_enum<T: VariantFieldCount>(v: &T) -> usize {
+    fn field_count_enum<T: EnumFieldCount>(v: &T) -> usize {
         v.field_count()
     }
 
@@ -110,14 +110,14 @@ mod tests {
         _generic_field: T,
     }
 
-    #[derive(VariantFieldCount)]
+    #[derive(EnumFieldCount)]
     enum MyEnum {
         A,
         B(usize),
         C(Vec<u8>, bool),
     }
 
-    #[derive(VariantFieldCount)]
+    #[derive(EnumFieldCount)]
     enum MyGenericEnum<T> {
         Basic,
         Gen(T),

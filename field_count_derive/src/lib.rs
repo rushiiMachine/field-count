@@ -21,7 +21,7 @@ pub fn derive_field_count(input: TokenStream) -> TokenStream {
     TokenStream::from(output)
 }
 
-#[proc_macro_derive(VariantFieldCount)]
+#[proc_macro_derive(EnumFieldCount)]
 pub fn derive_field_count_enum(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ItemEnum);
 
@@ -44,7 +44,7 @@ pub fn derive_field_count_enum(input: TokenStream) -> TokenStream {
     });
 
     let output = quote! {
-        impl #impl_generics VariantFieldCount for #enum_name #ty_generics #where_clause {
+        impl #impl_generics EnumFieldCount for #enum_name #ty_generics #where_clause {
             fn field_count(&self) -> usize {
                 match *self {
                     #match_arms

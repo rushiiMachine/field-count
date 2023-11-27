@@ -8,6 +8,7 @@ pub fn derive_field_count(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ItemStruct);
 
     let name = &input.ident;
+    let visibility = input.vis;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
     let field_count = input.fields.iter().count();
 
@@ -19,7 +20,7 @@ pub fn derive_field_count(input: TokenStream) -> TokenStream {
         }
 
         impl #impl_generics #name #ty_generics #where_clause {
-            const fn field_count() -> usize {
+            #visibility const fn field_count() -> usize {
                 #field_count
             }
         }

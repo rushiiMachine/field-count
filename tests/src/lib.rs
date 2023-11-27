@@ -62,7 +62,7 @@ fn field_count_enum<T: EnumFieldCount>(v: &T) -> usize {
 }
 
 #[derive(FieldCount)]
-struct MyStruct {
+pub struct MyStruct {
     _first_field: i32,
     _second_field: String,
     _third_field: u16,
